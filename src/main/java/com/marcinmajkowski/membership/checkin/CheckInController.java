@@ -1,29 +1,24 @@
 package com.marcinmajkowski.membership.checkin;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.time.Instant;
-import java.util.UUID;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/check-ins")
 class CheckInController {
 
+    private final CheckInService checkInService;
+
+    public CheckInController(CheckInService checkInService) {
+        this.checkInService = checkInService;
+    }
+
     @PostMapping
-    public CheckIn createCheckIn(CheckIn checkIn) {
-        return new CheckIn();
+    public CheckIn createCheckIn(@RequestBody CreateCheckInRequest createCheckInRequest) {
+        return checkInService.createCheckIn(createCheckInRequest);
     }
 
     @GetMapping("/{id}")
-    public CheckIn getCheckIn(@PathVariable String id) {
-        CheckIn checkIn = new CheckIn();
-        checkIn.setId(id);
-        checkIn.setCardCode(UUID.randomUUID().toString());
-        checkIn.setCreationInstant(Instant.now());
-        return checkIn;
+    public CheckIn getCheckIn(@PathVariable Long id) {
+        return checkInService.getCheckIn(id);
     }
 }
