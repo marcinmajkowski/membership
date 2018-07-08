@@ -3,6 +3,7 @@ package com.marcinmajkowski.membership.checkin;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -12,6 +13,10 @@ class CheckInService {
 
     public CheckInService(CheckInRepository checkInRepository) {
         this.checkInRepository = checkInRepository;
+    }
+
+    public List<CheckIn> getAll() {
+        return checkInRepository.findAll();
     }
 
     public CheckIn getCheckIn(Long id) {
