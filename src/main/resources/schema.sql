@@ -7,3 +7,14 @@ CREATE TABLE IF NOT EXISTS check_in (
 );
 ALTER SEQUENCE check_in_id_seq
 OWNED BY check_in.id;
+
+CREATE SEQUENCE IF NOT EXISTS customer_id_seq;
+CREATE TABLE IF NOT EXISTS customer (
+  id         BIGINT       NOT NULL DEFAULT nextval('customer_id_seq'),
+  first_name VARCHAR(128) NOT NUll,
+  last_name  VARCHAR(128) NOT NUll,
+  card_code  VARCHAR(128),
+  PRIMARY KEY (id)
+);
+ALTER SEQUENCE customer_id_seq
+OWNED BY customer.id;
