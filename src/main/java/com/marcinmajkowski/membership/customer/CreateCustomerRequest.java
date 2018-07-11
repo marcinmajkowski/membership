@@ -7,7 +7,6 @@ public class CreateCustomerRequest {
     @NotNull
     private String firstName;
 
-    @NotNull
     private String lastName;
 
     private String cardCode;
