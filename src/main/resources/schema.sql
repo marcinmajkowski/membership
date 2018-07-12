@@ -18,3 +18,8 @@ CREATE TABLE IF NOT EXISTS customer (
 );
 ALTER SEQUENCE customer_id_seq
 OWNED BY customer.id;
+
+CREATE TABLE IF NOT EXISTS card (
+  code        VARCHAR(128) PRIMARY KEY CHECK (code <> ''),
+  customer_id BIGINT NOT NULL REFERENCES customer (id)
+);
