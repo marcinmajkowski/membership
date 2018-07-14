@@ -1,5 +1,6 @@
 package com.marcinmajkowski.membership;
 
+// TODO auditing, deleting
 public class BaseEntity {
 
     private Long id;

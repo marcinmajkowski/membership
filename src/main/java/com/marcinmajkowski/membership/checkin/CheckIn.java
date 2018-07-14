@@ -1,36 +1,28 @@
 package com.marcinmajkowski.membership.checkin;
 
+import com.marcinmajkowski.membership.BaseEntity;
+
 import java.time.Instant;
 
-class CheckIn {
+class CheckIn extends BaseEntity {
 
-    private Long id;
+    private CheckInCustomer customer;
 
-    private String cardCode;
+    private Instant timestamp;
 
-    private Instant creationInstant;
-
-    public Long getId() {
-        return id;
+    public CheckInCustomer getCustomer() {
+        return customer;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCustomer(CheckInCustomer customer) {
+        this.customer = customer;
     }
 
-    public String getCardCode() {
-        return cardCode;
+    public Instant getTimestamp() {
+        return timestamp;
     }
 
-    public void setCardCode(String cardCode) {
-        this.cardCode = cardCode;
-    }
-
-    public Instant getCreationInstant() {
-        return creationInstant;
-    }
-
-    public void setCreationInstant(Instant creationInstant) {
-        this.creationInstant = creationInstant;
+    public void setTimestamp(Instant timestamp) {
+        this.timestamp = timestamp;
     }
 }

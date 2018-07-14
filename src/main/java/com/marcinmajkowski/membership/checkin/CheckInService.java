@@ -1,10 +1,10 @@
 package com.marcinmajkowski.membership.checkin;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 class CheckInService {
@@ -15,22 +15,20 @@ class CheckInService {
         this.checkInRepository = checkInRepository;
     }
 
+    @Transactional
     public List<CheckIn> getAll() {
         return checkInRepository.findAll();
     }
 
-    public CheckIn getCheckIn(Long id) {
-        return checkInRepository.findById(id);
-    }
-
-    public CheckIn createCheckIn(CreateCheckInRequest createCheckInRequest) {
-        Instant creationInstant = Optional.ofNullable(createCheckInRequest.getCreationInstant())
-                .orElseGet(Instant::now);
+    @Transactional
+    public CheckIn createCheckIn(Long customerId) {
+        CheckInCustomer customer = new CheckInCustomer();
+        customer.setId(customerId);
 
         CheckIn checkIn = new CheckIn();
-        checkIn.setCardCode(createCheckInRequest.getCardCode());
-        checkIn.setCreationInstant(creationInstant);
-        checkIn.setId(checkInRepository.insert(checkIn));
+        checkIn.setCustomer(customer);
+        checkIn.setTimestamp(Instant.now());
+        checkInRepository.storeCheckIn(checkIn);
         return checkIn;
     }
 }
