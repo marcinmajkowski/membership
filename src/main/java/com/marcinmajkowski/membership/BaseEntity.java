@@ -1,5 +1,7 @@
 package com.marcinmajkowski.membership;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 // TODO auditing, deleting
 public class BaseEntity {
 
@@ -13,6 +15,7 @@ public class BaseEntity {
         this.id = id;
     }
 
+    @JsonIgnore
     public boolean isNew() {
         return id == null;
     }
