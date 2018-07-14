@@ -1,22 +1,17 @@
 package com.marcinmajkowski.membership.customer;
 
-class Customer {
+import com.marcinmajkowski.membership.BaseEntity;
 
-    private Long id;
+import java.util.HashSet;
+import java.util.Set;
+
+class Customer extends BaseEntity {
 
     private String firstName;
 
     private String lastName;
 
-    private String cardCode;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private Set<Card> cards = new HashSet<>();
 
     public String getFirstName() {
         return firstName;
@@ -34,11 +29,16 @@ class Customer {
         this.lastName = lastName;
     }
 
-    public String getCardCode() {
-        return cardCode;
+    public Set<Card> getCards() {
+        return cards;
     }
 
-    public void setCardCode(String cardCode) {
-        this.cardCode = cardCode;
+    public void setCards(Set<Card> cards) {
+        this.cards = cards;
+    }
+
+    public void addCard(Card card) {
+        this.cards.add(card);
+        card.setCustomer(this);
     }
 }

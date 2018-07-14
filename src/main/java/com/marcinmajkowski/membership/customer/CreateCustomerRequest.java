@@ -7,8 +7,10 @@ public class CreateCustomerRequest {
     @NotNull
     private String firstName;
 
+    @NotNull
     private String lastName;
 
+    @NotNull
     private String cardCode;
 
     public String getFirstName() {
