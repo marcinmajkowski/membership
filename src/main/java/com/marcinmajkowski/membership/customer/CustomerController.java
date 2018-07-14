@@ -33,11 +33,11 @@ class CustomerController {
     public Map<String, List<Customer>> getCustomers(
             @RequestParam(value = "card_code", required = false) String cardCode
     ) {
-        List<Customer> customers = new ArrayList<>();
+        List<Customer> customers;
         if (cardCode != null) {
-            customers.add(customerService.findCustomerByCardCode(cardCode));
+            customers = customerService.findCustomersByCardCode(cardCode);
         } else {
-            customers.addAll(customerService.getCustomers());
+            customers = customerService.getCustomers();
         }
         return Collections.singletonMap("customers", customers);
     }

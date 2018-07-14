@@ -26,8 +26,8 @@ class CustomerService {
     }
 
     @Transactional
-    public Customer findCustomerByCardCode(String cardCode) {
-        return customerRepository.findCustomerByCardCode(cardCode);
+    public List<Customer> findCustomersByCardCode(String cardCode) {
+        return customerRepository.findCustomersByCardCode(cardCode);
     }
 
     @Transactional

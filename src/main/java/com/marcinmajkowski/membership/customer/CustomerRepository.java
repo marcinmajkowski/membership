@@ -49,11 +49,11 @@ class CustomerRepository {
         return customer;
     }
 
-    public Customer findCustomerByCardCode(String cardCode) {
-        String sql = "SELECT customer.id AS id, first_name, last_name FROM customer INNER JOIN card ON card.id = customer.id WHERE card.code = ?";
-        Customer customer = jdbcTemplate.queryForObject(sql, customerRowMapper, cardCode);
-        loadCards(customer);
-        return customer;
+    public List<Customer> findCustomersByCardCode(String cardCode) {
+        String sql = "SELECT customer.id AS id, first_name, last_name FROM customer INNER JOIN card ON card.customer_id = customer.id WHERE card.code = ?";
+        List<Customer> customers = jdbcTemplate.query(sql, customerRowMapper, cardCode);
+        customers.forEach(this::loadCards);
+        return customers;
     }
 
     public void storeCustomer(Customer customer) {
