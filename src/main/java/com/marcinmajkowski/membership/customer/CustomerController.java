@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +24,8 @@ class CustomerController {
     }
 
     @PostMapping
-    public Customer createCustomer(@Valid @RequestBody CreateCustomerRequest createCustomerRequest) {
-        return customerService.createCustomer(createCustomerRequest);
+    public Customer createCustomer(@Valid @RequestBody CreateCustomerForm createCustomerForm) {
+        return customerService.createCustomer(createCustomerForm);
     }
 
     @GetMapping

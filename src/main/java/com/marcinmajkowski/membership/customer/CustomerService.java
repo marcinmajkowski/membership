@@ -31,14 +31,14 @@ class CustomerService {
     }
 
     @Transactional
-    public Customer createCustomer(CreateCustomerRequest createCustomerRequest) {
+    public Customer createCustomer(CreateCustomerForm createCustomerForm) {
         Customer customer = new Customer();
-        customer.setFirstName(createCustomerRequest.getFirstName());
-        customer.setLastName(createCustomerRequest.getLastName());
+        customer.setFirstName(createCustomerForm.getFirstName());
+        customer.setLastName(createCustomerForm.getLastName());
         customerRepository.storeCustomer(customer);
 
-        if (StringUtils.hasText(createCustomerRequest.getCardCode())) {
-            createCard(customer, createCustomerRequest.getCardCode());
+        if (StringUtils.hasText(createCustomerForm.getCardCode())) {
+            createCard(customer, createCustomerForm.getCardCode());
         }
 
         return customer;

@@ -2,7 +2,7 @@ package com.marcinmajkowski.membership.customer;
 
 import javax.validation.constraints.NotNull;
 
-public class CreateCustomerRequest {
+public class CreateCustomerForm {
 
     @NotNull
     private String firstName;
