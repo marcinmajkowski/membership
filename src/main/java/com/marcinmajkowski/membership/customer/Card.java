@@ -3,6 +3,7 @@ package com.marcinmajkowski.membership.customer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.marcinmajkowski.membership.BaseEntity;
 
+// TODO separate cards feature from customers
 public class Card extends BaseEntity {
 
     private String code;

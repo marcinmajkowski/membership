@@ -26,3 +26,14 @@ CREATE TABLE IF NOT EXISTS check_in (
 );
 ALTER SEQUENCE check_in_id_seq
 OWNED BY check_in.id;
+
+CREATE SEQUENCE IF NOT EXISTS payment_id_seq;
+CREATE TABLE IF NOT EXISTS payment (
+  id          BIGINT         NOT NULL DEFAULT nextval('payment_id_seq'),
+  customer_id BIGINT         NOT NULL REFERENCES customer (id),
+  amount      NUMERIC(12, 2) NOT NULL,
+  timestamp   TIMESTAMP      NOT NUll,
+  PRIMARY KEY (id)
+);
+ALTER SEQUENCE payment_id_seq
+OWNED BY payment.id;
