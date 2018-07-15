@@ -25,6 +25,11 @@ class CheckInController {
         return checkInService.createCheckIn(customerId);
     }
 
+    @GetMapping("/customers/{customerId}/check-ins")
+    public Map<String, List<CheckIn>> getCustomerCheckIns(@PathVariable Long customerId) {
+        return Collections.singletonMap("checkIns", checkInService.findCheckInsByCustomerId(customerId));
+    }
+
     @GetMapping("/check-ins")
     public Map<String, List<CheckIn>> getAll() {
         return Collections.singletonMap("checkIns", checkInService.getAll());

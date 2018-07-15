@@ -16,6 +16,11 @@ class CheckInService {
     }
 
     @Transactional
+    public List<CheckIn> findCheckInsByCustomerId(Long customerId) {
+        return checkInRepository.findCheckInsByCustomerId(customerId);
+    }
+
+    @Transactional
     public List<CheckIn> getAll() {
         return checkInRepository.findAll();
     }

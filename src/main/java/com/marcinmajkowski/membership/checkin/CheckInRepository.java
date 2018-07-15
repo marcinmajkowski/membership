@@ -33,6 +33,14 @@ class CheckInRepository {
                 .usingGeneratedKeyColumns("id");
     }
 
+    public List<CheckIn> findCheckInsByCustomerId(Long customerId) {
+        String sql = "SELECT id, timestamp FROM check_in WHERE customer_id = ? ORDER BY timestamp DESC";
+        List<CheckIn> checkIns = jdbcTemplate.query(sql, checkInRowMapper, customerId);
+        // FIXME N+1
+        checkIns.forEach(this::loadCustomer);
+        return checkIns;
+    }
+
     public List<CheckIn> findAll() {
         String sql = "SELECT id, timestamp FROM check_in ORDER BY timestamp DESC";
         List<CheckIn> checkIns = jdbcTemplate.query(sql, checkInRowMapper);
