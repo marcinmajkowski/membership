@@ -36,4 +36,9 @@ class CheckInService {
         checkInRepository.storeCheckIn(checkIn);
         return checkIn;
     }
+
+    @Transactional
+    public void deleteCheckIn(Long checkInId) {
+        checkInRepository.deleteCheckIn(checkInId);
+    }
 }

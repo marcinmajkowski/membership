@@ -1,5 +1,6 @@
 package com.marcinmajkowski.membership.checkin;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,5 +34,11 @@ class CheckInController {
     @GetMapping("/check-ins")
     public Map<String, List<CheckIn>> getAll() {
         return Collections.singletonMap("checkIns", checkInService.getAll());
+    }
+
+    @DeleteMapping("/check-ins/{checkInId}")
+    public Map deleteCheckIn(@PathVariable Long checkInId) {
+        checkInService.deleteCheckIn(checkInId);
+        return Collections.emptyMap();
     }
 }

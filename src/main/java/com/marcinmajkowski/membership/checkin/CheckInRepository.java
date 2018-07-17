@@ -59,6 +59,11 @@ class CheckInRepository {
         }
     }
 
+    public void deleteCheckIn(Long checkInId) {
+        String sql = "DELETE FROM check_in WHERE id = ?";
+        jdbcTemplate.update(sql, checkInId);
+    }
+
     private void loadCustomer(CheckIn checkIn) {
         String sql = "SELECT customer.id as id, first_name, last_name FROM customer INNER JOIN check_in ON check_in.customer_id = customer.id WHERE check_in.id = ?";
         CheckInCustomer customer = jdbcTemplate.queryForObject(
