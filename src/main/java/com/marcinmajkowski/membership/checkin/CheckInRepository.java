@@ -60,6 +60,7 @@ class CheckInRepository {
     }
 
     public void deleteCheckIn(Long checkInId) {
+        // TODO mark as deleted insted
         String sql = "DELETE FROM check_in WHERE id = ?";
         jdbcTemplate.update(sql, checkInId);
     }
