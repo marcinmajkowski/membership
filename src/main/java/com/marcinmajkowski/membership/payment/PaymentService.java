@@ -21,6 +21,11 @@ class PaymentService {
     }
 
     @Transactional
+    public List<Payment> findPaymentsByCustomerId(Long customerId) {
+        return paymentRepository.findPaymentsByCustomerId(customerId);
+    }
+
+    @Transactional
     public Payment createPayment(Long customerId, CreatePaymentForm createPaymentForm) {
         PaymentCustomer customer = new PaymentCustomer();
         customer.setId(customerId);

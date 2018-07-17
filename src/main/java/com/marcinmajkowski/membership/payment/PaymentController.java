@@ -30,6 +30,12 @@ class PaymentController {
         return paymentService.createPayment(customerId, createPaymentForm);
     }
 
+
+    @GetMapping("/customers/{customerId}/payments")
+    public Map<String, List<Payment>> getCustomerPayments(@PathVariable Long customerId) {
+        return Collections.singletonMap("payments", paymentService.findPaymentsByCustomerId(customerId));
+    }
+
     @GetMapping("/payments")
     public Map<String, List<Payment>> getAll() {
         return Collections.singletonMap("payments", paymentService.getAll());

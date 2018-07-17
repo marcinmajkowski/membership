@@ -42,6 +42,14 @@ class PaymentRepository {
         return payments;
     }
 
+    public List<Payment> findPaymentsByCustomerId(Long customerId) {
+        String sql = "SELECT id, amount, timestamp FROM payment WHERE customer_id = ? ORDER BY timestamp DESC";
+        List<Payment> payments = jdbcTemplate.query(sql, paymentRowMapper, customerId);
+        // FIXME N+1
+        payments.forEach(this::loadCustomer);
+        return payments;
+    }
+
     public void storePayment(Payment payment) {
         if (payment.isNew()) {
             Number key = paymentInsert.executeAndReturnKey(createPaymentParameterSource(payment));
