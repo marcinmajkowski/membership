@@ -1,5 +1,6 @@
 package com.marcinmajkowski.membership.customer;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,5 +45,11 @@ class CustomerController {
     @GetMapping("/{id}")
     public Customer getCustomer(@PathVariable Long id) {
         return customerService.getCustomer(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public Map deleteCustomer(@PathVariable Long id) {
+        customerService.deleteCustomer(id);
+        return Collections.emptyMap();
     }
 }

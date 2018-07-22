@@ -1,5 +1,6 @@
 package com.marcinmajkowski.membership.payment;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -62,11 +63,16 @@ class PaymentRepository {
 
     private void loadCustomer(Payment payment) {
         String sql = "SELECT customer.id as id, first_name, last_name FROM customer INNER JOIN payment ON payment.customer_id = customer.id WHERE payment.id = ?";
-        PaymentCustomer customer = jdbcTemplate.queryForObject(
-                sql,
-                paymentCustomerRowMapper,
-                payment.getId()
-        );
+        PaymentCustomer customer;
+        try {
+            customer = jdbcTemplate.queryForObject(
+                    sql,
+                    paymentCustomerRowMapper,
+                    payment.getId()
+            );
+        } catch (EmptyResultDataAccessException e) {
+            customer = null;
+        }
         payment.setCustomer(customer);
     }
 

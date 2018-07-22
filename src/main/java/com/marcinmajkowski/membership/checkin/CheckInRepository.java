@@ -1,5 +1,6 @@
 package com.marcinmajkowski.membership.checkin;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -60,18 +61,22 @@ class CheckInRepository {
     }
 
     public void deleteCheckIn(Long checkInId) {
-        // TODO mark as deleted insted
         String sql = "DELETE FROM check_in WHERE id = ?";
         jdbcTemplate.update(sql, checkInId);
     }
 
     private void loadCustomer(CheckIn checkIn) {
         String sql = "SELECT customer.id as id, first_name, last_name FROM customer INNER JOIN check_in ON check_in.customer_id = customer.id WHERE check_in.id = ?";
-        CheckInCustomer customer = jdbcTemplate.queryForObject(
-                sql,
-                checkInCustomerRowMapper,
-                checkIn.getId()
-        );
+        CheckInCustomer customer;
+        try {
+            customer = jdbcTemplate.queryForObject(
+                    sql,
+                    checkInCustomerRowMapper,
+                    checkIn.getId()
+            );
+        } catch (EmptyResultDataAccessException e) {
+            customer = null;
+        }
         checkIn.setCustomer(customer);
     }
 

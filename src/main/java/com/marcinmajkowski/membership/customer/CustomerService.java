@@ -44,6 +44,11 @@ class CustomerService {
         return customer;
     }
 
+    @Transactional
+    public void deleteCustomer(Long id) {
+        customerRepository.deleteCustomer(id);
+    }
+
     private void createCard(Customer customer, String cardCode) {
         Card card = new Card();
         card.setCode(cardCode);

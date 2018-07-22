@@ -74,6 +74,11 @@ class CustomerRepository {
         }
     }
 
+    public void deleteCustomer(Long id) {
+        String sql = "DELETE FROM customer WHERE id = ?";
+        jdbcTemplate.update(sql, id);
+    }
+
     private void loadCards(Customer customer) {
         List<Card> cards = jdbcTemplate.query(
                 "SELECT id, code FROM card WHERE customer_id = ?",
