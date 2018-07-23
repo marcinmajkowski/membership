@@ -1,7 +1,6 @@
 package com.marcinmajkowski.membership.checkin;
 
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import com.marcinmajkowski.membership.customer.CustomerReference;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -14,14 +13,24 @@ import java.util.List;
 @Repository
 class CheckInRepository {
 
+    private final RowMapper<CustomerReference> customerReferenceRowMapper = (rs, rowNum) -> {
+        Long customerId = rs.getLong("customer_id");
+        if (rs.wasNull()) {
+            return null;
+        } else {
+            CustomerReference customerReference = new CustomerReference();
+            customerReference.setId(customerId);
+            return customerReference;
+        }
+    };
+
     private final RowMapper<CheckIn> checkInRowMapper = (rs, rowNum) -> {
         CheckIn checkIn = new CheckIn();
         checkIn.setId(rs.getLong("id"));
+        checkIn.setCustomer(customerReferenceRowMapper.mapRow(rs, rowNum));
         checkIn.setTimestamp(rs.getTimestamp("timestamp").toInstant());
         return checkIn;
     };
-
-    private final RowMapper<CheckInCustomer> checkInCustomerRowMapper = new BeanPropertyRowMapper<>(CheckInCustomer.class);
 
     private final SimpleJdbcInsert checkInInsert;
 
@@ -35,26 +44,19 @@ class CheckInRepository {
     }
 
     public List<CheckIn> findCheckInsByCustomerId(Long customerId) {
-        String sql = "SELECT id, timestamp FROM check_in WHERE customer_id = ? ORDER BY timestamp DESC";
-        List<CheckIn> checkIns = jdbcTemplate.query(sql, checkInRowMapper, customerId);
-        // FIXME N+1
-        checkIns.forEach(this::loadCustomer);
-        return checkIns;
+        String sql = "SELECT id, timestamp, customer_id FROM check_in WHERE customer_id = ? ORDER BY timestamp DESC";
+        return jdbcTemplate.query(sql, checkInRowMapper, customerId);
     }
 
     public List<CheckIn> findAll() {
-        String sql = "SELECT id, timestamp FROM check_in ORDER BY timestamp DESC";
-        List<CheckIn> checkIns = jdbcTemplate.query(sql, checkInRowMapper);
-        // FIXME N+1
-        checkIns.forEach(this::loadCustomer);
-        return checkIns;
+        String sql = "SELECT id, timestamp, customer_id FROM check_in ORDER BY timestamp DESC";
+        return jdbcTemplate.query(sql, checkInRowMapper);
     }
 
     public void storeCheckIn(CheckIn checkIn) {
         if (checkIn.isNew()) {
             Number key = checkInInsert.executeAndReturnKey(createCheckInParameterSource(checkIn));
             checkIn.setId(key.longValue());
-            loadCustomer(checkIn);
         } else {
             throw new UnsupportedOperationException("checkIn update not implemented");
         }
@@ -65,25 +67,12 @@ class CheckInRepository {
         jdbcTemplate.update(sql, checkInId);
     }
 
-    private void loadCustomer(CheckIn checkIn) {
-        String sql = "SELECT customer.id as id, first_name, last_name FROM customer INNER JOIN check_in ON check_in.customer_id = customer.id WHERE check_in.id = ?";
-        CheckInCustomer customer;
-        try {
-            customer = jdbcTemplate.queryForObject(
-                    sql,
-                    checkInCustomerRowMapper,
-                    checkIn.getId()
-            );
-        } catch (EmptyResultDataAccessException e) {
-            customer = null;
-        }
-        checkIn.setCustomer(customer);
-    }
-
     private MapSqlParameterSource createCheckInParameterSource(CheckIn checkIn) {
+        CustomerReference customer = checkIn.getCustomer();
+        Long customerId = customer != null ? customer.getId() : null;
         return new MapSqlParameterSource()
                 .addValue("id", checkIn.getId())
-                .addValue("customer_id", checkIn.getCustomer().getId())
+                .addValue("customer_id", customerId)
                 .addValue("timestamp", Timestamp.from(checkIn.getTimestamp()));
     }
 }

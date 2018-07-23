@@ -5,9 +5,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
-class CustomerService {
+public class CustomerService {
 
     private final CustomerRepository customerRepository;
 
@@ -18,6 +20,14 @@ class CustomerService {
     @Transactional
     public List<Customer> getCustomers() {
         return customerRepository.getCustomers();
+    }
+
+    @Transactional
+    public List<Customer> getCustomers(Set<CustomerReference> references) {
+        Set<Long> ids = references.stream()
+                .map(CustomerReference::getId)
+                .collect(Collectors.toSet());
+        return customerRepository.getCustomers(ids);
     }
 
     @Transactional

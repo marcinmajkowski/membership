@@ -5,7 +5,7 @@ import com.marcinmajkowski.membership.BaseEntity;
 import java.util.HashSet;
 import java.util.Set;
 
-class Customer extends BaseEntity {
+public class Customer extends BaseEntity {
 
     private String firstName;
 

@@ -1,5 +1,9 @@
 package com.marcinmajkowski.membership.checkin;
 
+import com.marcinmajkowski.membership.customer.Customer;
+import com.marcinmajkowski.membership.customer.CustomerReference;
+import com.marcinmajkowski.membership.customer.CustomerService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,8 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -17,8 +25,11 @@ class CheckInController {
 
     private final CheckInService checkInService;
 
-    public CheckInController(CheckInService checkInService) {
+    private final CustomerService customerService;
+
+    public CheckInController(CheckInService checkInService, CustomerService customerService) {
         this.checkInService = checkInService;
+        this.customerService = customerService;
     }
 
     @PostMapping("/customers/{customerId}/check-ins")
@@ -31,9 +42,21 @@ class CheckInController {
         return Collections.singletonMap("checkIns", checkInService.findCheckInsByCustomerId(customerId));
     }
 
+    // TODO move implementation to service
+    // TODO response class
+    @Transactional
     @GetMapping("/check-ins")
-    public Map<String, List<CheckIn>> getAll() {
-        return Collections.singletonMap("checkIns", checkInService.getAll());
+    public Map<String, List> getAll() {
+        List<CheckIn> checkIns = checkInService.getAll();
+        Set<CustomerReference> customerReferences = checkIns.stream()
+                .map(CheckIn::getCustomer)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+        List<Customer> customers = customerService.getCustomers(customerReferences);
+        Map<String, List> response = new HashMap<>();
+        response.put("checkIns", checkIns);
+        response.put("customers", customers);
+        return response;
     }
 
     @DeleteMapping("/check-ins/{checkInId}")

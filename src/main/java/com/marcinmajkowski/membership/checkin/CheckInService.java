@@ -1,5 +1,6 @@
 package com.marcinmajkowski.membership.checkin;
 
+import com.marcinmajkowski.membership.customer.CustomerReference;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +28,7 @@ class CheckInService {
 
     @Transactional
     public CheckIn createCheckIn(Long customerId) {
-        CheckInCustomer customer = new CheckInCustomer();
+        CustomerReference customer = new CustomerReference();
         customer.setId(customerId);
 
         CheckIn checkIn = new CheckIn();

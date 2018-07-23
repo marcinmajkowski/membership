@@ -1,20 +1,21 @@
 package com.marcinmajkowski.membership.checkin;
 
 import com.marcinmajkowski.membership.BaseEntity;
+import com.marcinmajkowski.membership.customer.CustomerReference;
 
 import java.time.Instant;
 
 class CheckIn extends BaseEntity {
 
-    private CheckInCustomer customer;
+    private CustomerReference customer;
 
     private Instant timestamp;
 
-    public CheckInCustomer getCustomer() {
+    public CustomerReference getCustomer() {
         return customer;
     }
 
-    public void setCustomer(CheckInCustomer customer) {
+    public void setCustomer(CustomerReference customer) {
         this.customer = customer;
     }
 
