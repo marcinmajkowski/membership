@@ -1,24 +1,41 @@
 package com.marcinmajkowski.membership.payment;
 
-import com.marcinmajkowski.membership.BaseEntity;
-
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
-class Payment extends BaseEntity {
+@Entity
+class Payment {
 
-    private PaymentCustomer customer;
+    @Id
+    @SequenceGenerator(name = "payment_generator", sequenceName = "payment_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payment_generator")
+    private Long id;
+
+    private Long customerId;
 
     private BigDecimal amount;
 
-    private Instant timestamp;
+    private LocalDateTime timestamp;
 
-    public PaymentCustomer getCustomer() {
-        return customer;
+    public Long getId() {
+        return id;
     }
 
-    public void setCustomer(PaymentCustomer customer) {
-        this.customer = customer;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public BigDecimal getAmount() {
@@ -29,11 +46,11 @@ class Payment extends BaseEntity {
         this.amount = amount;
     }
 
-    public Instant getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Instant timestamp) {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
 }

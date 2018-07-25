@@ -3,7 +3,7 @@ package com.marcinmajkowski.membership.payment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -17,24 +17,20 @@ class PaymentService {
 
     @Transactional
     public List<Payment> getAll() {
-        return paymentRepository.findAll();
+        return paymentRepository.findAllByOrderByTimestampDesc();
     }
 
     @Transactional
     public List<Payment> findPaymentsByCustomerId(Long customerId) {
-        return paymentRepository.findPaymentsByCustomerId(customerId);
+        return paymentRepository.findByCustomerIdOrderByTimestampDesc(customerId);
     }
 
     @Transactional
     public Payment createPayment(Long customerId, CreatePaymentForm createPaymentForm) {
-        PaymentCustomer customer = new PaymentCustomer();
-        customer.setId(customerId);
-
         Payment payment = new Payment();
-        payment.setCustomer(customer);
+        payment.setCustomerId(customerId);
         payment.setAmount(createPaymentForm.getAmount());
-        payment.setTimestamp(Instant.now());
-        paymentRepository.storePayment(payment);
-        return payment;
+        payment.setTimestamp(LocalDateTime.now());
+        return paymentRepository.save(payment);
     }
 }
