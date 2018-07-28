@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -45,6 +46,9 @@ class CustomerRepository {
     }
 
     public List<Customer> getCustomers(Set<Long> ids) {
+        if (ids.isEmpty()) {
+            return Collections.emptyList();
+        }
         String sql = "SELECT id, first_name, last_name FROM customer WHERE id IN (:ids)";
         MapSqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("ids", ids);
