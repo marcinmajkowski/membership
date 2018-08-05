@@ -15,12 +15,12 @@ class PaymentService {
         this.paymentRepository = paymentRepository;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Payment> getAll() {
         return paymentRepository.findAllByOrderByTimestampDesc();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Payment> findPaymentsByCustomerId(Long customerId) {
         return paymentRepository.findByCustomerIdOrderByTimestampDesc(customerId);
     }
@@ -32,5 +32,12 @@ class PaymentService {
         payment.setAmount(createPaymentForm.getAmount());
         payment.setTimestamp(LocalDateTime.now());
         return paymentRepository.save(payment);
+    }
+
+    @Transactional
+    public Payment deletePayment(Long paymentId) {
+        Payment payment = paymentRepository.findById(paymentId).get();
+        paymentRepository.delete(payment);
+        return payment;
     }
 }
