@@ -37,3 +37,13 @@ CREATE TABLE IF NOT EXISTS payment (
   timestamp   TIMESTAMP      NOT NUll,
   PRIMARY KEY (id)
 );
+
+CREATE TABLE IF NOT EXISTS application_user (
+  id               BIGINT       NOT NULL,
+  email            VARCHAR(254) NOT NULL CHECK (length(email) >= 3),
+  encoded_password VARCHAR(128) NOT NULL,
+  enabled          BOOLEAN      NOT NULL,
+  PRIMARY KEY (id)
+);
+CREATE UNIQUE INDEX IF NOT EXISTS application_user_lower_email_unique_idx
+  ON application_user (lower(email));
