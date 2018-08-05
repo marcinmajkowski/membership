@@ -1,29 +1,39 @@
 package com.marcinmajkowski.membership.checkin;
 
-import com.marcinmajkowski.membership.BaseEntity;
-import com.marcinmajkowski.membership.customer.CustomerReference;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import java.time.LocalDateTime;
 
-import java.time.Instant;
+@Entity
+class CheckIn {
 
-class CheckIn extends BaseEntity {
+    @Id
+    @GeneratedValue
+    // TODO @JsonSerialize(using = ToStringSerializer.class)
+    private Long id;
 
-    private CustomerReference customer;
+    private Long customerId;
 
-    private Instant timestamp;
+    private LocalDateTime timestamp;
 
-    public CustomerReference getCustomer() {
-        return customer;
+    public Long getId() {
+        return id;
     }
 
-    public void setCustomer(CustomerReference customer) {
-        this.customer = customer;
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public Instant getTimestamp() {
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
+
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Instant timestamp) {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
 }

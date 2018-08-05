@@ -20,15 +20,12 @@ CREATE TABLE IF NOT EXISTS card (
 ALTER SEQUENCE card_id_seq
 OWNED BY card.id;
 
-CREATE SEQUENCE IF NOT EXISTS check_in_id_seq;
 CREATE TABLE IF NOT EXISTS check_in (
-  id          BIGINT    NOT NULL DEFAULT nextval('check_in_id_seq'),
+  id          BIGINT    NOT NULL,
   customer_id BIGINT REFERENCES customer (id) ON DELETE SET NULL,
   timestamp   TIMESTAMP NOT NUll,
   PRIMARY KEY (id)
 );
-ALTER SEQUENCE check_in_id_seq
-OWNED BY check_in.id;
 
 CREATE TABLE IF NOT EXISTS payment (
   id          BIGINT         NOT NULL,

@@ -1,10 +1,9 @@
 package com.marcinmajkowski.membership.checkin;
 
-import com.marcinmajkowski.membership.customer.CustomerReference;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -16,30 +15,28 @@ class CheckInService {
         this.checkInRepository = checkInRepository;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<CheckIn> findCheckInsByCustomerId(Long customerId) {
-        return checkInRepository.findCheckInsByCustomerId(customerId);
+        return checkInRepository.findByCustomerIdOrderByTimestampDesc(customerId);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<CheckIn> getAll() {
-        return checkInRepository.findAll();
+        return checkInRepository.findAllByOrderByTimestampDesc();
     }
 
     @Transactional
     public CheckIn createCheckIn(Long customerId) {
-        CustomerReference customer = new CustomerReference();
-        customer.setId(customerId);
-
         CheckIn checkIn = new CheckIn();
-        checkIn.setCustomer(customer);
-        checkIn.setTimestamp(Instant.now());
-        checkInRepository.storeCheckIn(checkIn);
-        return checkIn;
+        checkIn.setCustomerId(customerId);
+        checkIn.setTimestamp(LocalDateTime.now());
+        return checkInRepository.save(checkIn);
     }
 
     @Transactional
-    public void deleteCheckIn(Long checkInId) {
-        checkInRepository.deleteCheckIn(checkInId);
+    public CheckIn deleteCheckIn(Long checkInId) {
+        CheckIn checkIn = checkInRepository.findById(checkInId).get();
+        checkInRepository.delete(checkIn);
+        return checkIn;
     }
 }

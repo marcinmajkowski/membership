@@ -1,7 +1,6 @@
 package com.marcinmajkowski.membership.checkin;
 
 import com.marcinmajkowski.membership.customer.Customer;
-import com.marcinmajkowski.membership.customer.CustomerReference;
 import com.marcinmajkowski.membership.customer.CustomerService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -48,11 +47,11 @@ class CheckInController {
     @GetMapping("/check-ins")
     public Map<String, List> getAll() {
         List<CheckIn> checkIns = checkInService.getAll();
-        Set<CustomerReference> customerReferences = checkIns.stream()
-                .map(CheckIn::getCustomer)
+        Set<Long> customerIds = checkIns.stream()
+                .map(CheckIn::getCustomerId)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
-        List<Customer> customers = customerService.getCustomers(customerReferences);
+        List<Customer> customers = customerService.getCustomers(customerIds);
         Map<String, List> response = new HashMap<>();
         response.put("checkIns", checkIns);
         response.put("customers", customers);
@@ -60,8 +59,7 @@ class CheckInController {
     }
 
     @DeleteMapping("/check-ins/{checkInId}")
-    public Map deleteCheckIn(@PathVariable Long checkInId) {
-        checkInService.deleteCheckIn(checkInId);
-        return Collections.emptyMap();
+    public CheckIn deleteCheckIn(@PathVariable Long checkInId) {
+        return checkInService.deleteCheckIn(checkInId);
     }
 }

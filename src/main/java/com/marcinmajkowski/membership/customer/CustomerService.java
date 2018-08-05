@@ -6,7 +6,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
@@ -23,10 +22,7 @@ public class CustomerService {
     }
 
     @Transactional
-    public List<Customer> getCustomers(Set<CustomerReference> references) {
-        Set<Long> ids = references.stream()
-                .map(CustomerReference::getId)
-                .collect(Collectors.toSet());
+    public List<Customer> getCustomers(Set<Long> ids) {
         return customerRepository.getCustomers(ids);
     }
 
