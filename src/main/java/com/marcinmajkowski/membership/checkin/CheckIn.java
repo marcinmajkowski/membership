@@ -1,5 +1,8 @@
 package com.marcinmajkowski.membership.checkin;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -10,9 +13,10 @@ class CheckIn {
 
     @Id
     @GeneratedValue
-    // TODO @JsonSerialize(using = ToStringSerializer.class)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long customerId;
 
     private LocalDateTime timestamp;
