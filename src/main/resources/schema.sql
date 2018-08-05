@@ -1,3 +1,5 @@
+CREATE SEQUENCE IF NOT EXISTS hibernate_sequence;
+
 CREATE SEQUENCE IF NOT EXISTS customer_id_seq;
 CREATE TABLE IF NOT EXISTS customer (
   id         BIGINT       NOT NULL DEFAULT nextval('customer_id_seq'),
@@ -28,13 +30,10 @@ CREATE TABLE IF NOT EXISTS check_in (
 ALTER SEQUENCE check_in_id_seq
 OWNED BY check_in.id;
 
-CREATE SEQUENCE IF NOT EXISTS payment_id_seq;
 CREATE TABLE IF NOT EXISTS payment (
-  id          BIGINT         NOT NULL DEFAULT nextval('payment_id_seq'),
+  id          BIGINT         NOT NULL,
   customer_id BIGINT REFERENCES customer (id) ON DELETE SET NULL,
   amount      NUMERIC(12, 2) NOT NULL,
   timestamp   TIMESTAMP      NOT NUll,
   PRIMARY KEY (id)
 );
-ALTER SEQUENCE payment_id_seq
-OWNED BY payment.id;

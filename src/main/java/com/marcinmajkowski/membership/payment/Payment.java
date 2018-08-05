@@ -2,9 +2,7 @@ package com.marcinmajkowski.membership.payment;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -12,8 +10,7 @@ import java.time.LocalDateTime;
 class Payment {
 
     @Id
-    @SequenceGenerator(name = "payment_generator", sequenceName = "payment_id_seq")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payment_generator")
+    @GeneratedValue
     private Long id;
 
     private Long customerId;
@@ -24,10 +21,6 @@ class Payment {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Long getCustomerId() {
