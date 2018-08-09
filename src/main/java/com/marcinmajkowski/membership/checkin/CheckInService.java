@@ -22,7 +22,8 @@ class CheckInService {
 
     @Transactional(readOnly = true)
     public List<CheckIn> getAll() {
-        return checkInRepository.findAllByOrderByTimestampDesc();
+        // TODO accept timestamp from request
+        return checkInRepository.findFirst20ByTimestampBeforeOrderByTimestampDesc(LocalDateTime.now());
     }
 
     @Transactional
