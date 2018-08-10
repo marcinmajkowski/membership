@@ -2,14 +2,17 @@ package com.marcinmajkowski.membership.checkin;
 
 import com.marcinmajkowski.membership.customer.Customer;
 import com.marcinmajkowski.membership.customer.CustomerService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -45,8 +48,12 @@ class CheckInController {
     // TODO response class
     @Transactional
     @GetMapping("/check-ins")
-    public Map<String, List> getAll() {
-        List<CheckIn> checkIns = checkInService.getAll();
+    public Map<String, List> getFirst20BeforeTimestamp(
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            @RequestParam(required = false)
+                    LocalDateTime beforeTimestamp
+    ) {
+        List<CheckIn> checkIns = checkInService.getFirst20BeforeTimestamp(beforeTimestamp);
         Set<Long> customerIds = checkIns.stream()
                 .map(CheckIn::getCustomerId)
                 .filter(Objects::nonNull)
