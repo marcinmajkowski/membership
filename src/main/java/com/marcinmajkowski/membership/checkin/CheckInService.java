@@ -32,10 +32,18 @@ class CheckInService {
     @Transactional
     public CheckIn createCheckIn(Long customerId) {
         for (int i = 0; i < 1000; i++) {
-            long generatedRandom = (long) (Math.random() * 100);
+            long hours = (long) (Math.random() * 100);
+            long minutes = (long) (Math.random() * 100);
+            long seconds = (long) (Math.random() * 100);
             CheckIn checkIn = new CheckIn();
             checkIn.setCustomerId(customerId);
-            checkIn.setTimestamp(LocalDateTime.now().minusDays(i).minusHours(generatedRandom));
+            checkIn.setTimestamp(LocalDateTime
+                    .now()
+                    .minusDays(i)
+                    .minusHours(hours)
+                    .minusMinutes(minutes)
+                    .minusSeconds(seconds)
+            );
             checkInRepository.save(checkIn);
         }
         CheckIn checkIn = new CheckIn();
