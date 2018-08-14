@@ -40,8 +40,13 @@ class CheckInController {
     }
 
     @GetMapping("/customers/{customerId}/check-ins")
-    public Map<String, List<CheckIn>> getCustomerCheckIns(@PathVariable Long customerId) {
-        return Collections.singletonMap("checkIns", checkInService.findCheckInsByCustomerId(customerId));
+    public Map<String, List<CheckIn>> getCustomerCheckIns(
+            @PathVariable Long customerId,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            @RequestParam(required = false) LocalDateTime beforeTimestamp
+    ) {
+        List<CheckIn> checkIns = checkInService.getCustomerFirst20BeforeTimestamp(customerId, beforeTimestamp);
+        return Collections.singletonMap("checkIns", checkIns);
     }
 
     // TODO move implementation to service
@@ -50,8 +55,7 @@ class CheckInController {
     @GetMapping("/check-ins")
     public Map<String, List> getFirst20BeforeTimestamp(
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-            @RequestParam(required = false)
-                    LocalDateTime beforeTimestamp
+            @RequestParam(required = false) LocalDateTime beforeTimestamp
     ) {
         List<CheckIn> checkIns = checkInService.getFirst20BeforeTimestamp(beforeTimestamp);
         Set<Long> customerIds = checkIns.stream()

@@ -16,17 +16,15 @@ class CheckInService {
     }
 
     @Transactional(readOnly = true)
-    public List<CheckIn> findCheckInsByCustomerId(Long customerId) {
-        return checkInRepository.findByCustomerIdOrderByTimestampDesc(customerId);
+    public List<CheckIn> getCustomerFirst20BeforeTimestamp(Long customerId, LocalDateTime timestamp) {
+        LocalDateTime beforeTimestamp = timestamp != null ? timestamp : LocalDateTime.now();
+        return checkInRepository.findFirst20ByCustomerIdAndTimestampBeforeOrderByTimestampDesc(customerId, beforeTimestamp);
     }
 
     @Transactional(readOnly = true)
     public List<CheckIn> getFirst20BeforeTimestamp(LocalDateTime timestamp) {
-        if (timestamp != null) {
-            return checkInRepository.findFirst20ByTimestampBeforeOrderByTimestampDesc(timestamp);
-        } else {
-            return checkInRepository.findFirst20ByTimestampBeforeOrderByTimestampDesc(LocalDateTime.now());
-        }
+        LocalDateTime beforeTimestamp = timestamp != null ? timestamp : LocalDateTime.now();
+        return checkInRepository.findFirst20ByTimestampBeforeOrderByTimestampDesc(beforeTimestamp);
     }
 
     @Transactional
