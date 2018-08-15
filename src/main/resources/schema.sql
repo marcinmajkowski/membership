@@ -1,5 +1,15 @@
 CREATE SEQUENCE IF NOT EXISTS hibernate_sequence;
 
+CREATE TABLE IF NOT EXISTS application_user (
+  id               BIGINT       NOT NULL,
+  email            VARCHAR(254) NOT NULL CHECK (length(email) >= 3),
+  encoded_password VARCHAR(128) NOT NULL,
+  enabled          BOOLEAN      NOT NULL,
+  PRIMARY KEY (id)
+);
+CREATE UNIQUE INDEX IF NOT EXISTS application_user_lower_email_unique_idx
+  ON application_user (lower(email));
+
 CREATE SEQUENCE IF NOT EXISTS customer_id_seq;
 CREATE TABLE IF NOT EXISTS customer (
   id         BIGINT       NOT NULL DEFAULT nextval('customer_id_seq'),
@@ -8,7 +18,7 @@ CREATE TABLE IF NOT EXISTS customer (
   PRIMARY KEY (id)
 );
 ALTER SEQUENCE customer_id_seq
-OWNED BY customer.id;
+  OWNED BY customer.id;
 
 CREATE SEQUENCE IF NOT EXISTS card_id_seq;
 CREATE TABLE IF NOT EXISTS card (
@@ -18,7 +28,7 @@ CREATE TABLE IF NOT EXISTS card (
   PRIMARY KEY (id)
 );
 ALTER SEQUENCE card_id_seq
-OWNED BY card.id;
+  OWNED BY card.id;
 
 CREATE TABLE IF NOT EXISTS check_in (
   id          BIGINT    NOT NULL,
@@ -35,12 +45,3 @@ CREATE TABLE IF NOT EXISTS payment (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS application_user (
-  id               BIGINT       NOT NULL,
-  email            VARCHAR(254) NOT NULL CHECK (length(email) >= 3),
-  encoded_password VARCHAR(128) NOT NULL,
-  enabled          BOOLEAN      NOT NULL,
-  PRIMARY KEY (id)
-);
-CREATE UNIQUE INDEX IF NOT EXISTS application_user_lower_email_unique_idx
-  ON application_user (lower(email));
