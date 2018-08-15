@@ -10,6 +10,20 @@ CREATE TABLE IF NOT EXISTS application_user (
 CREATE UNIQUE INDEX IF NOT EXISTS application_user_lower_email_unique_idx
   ON application_user (lower(email));
 
+CREATE TABLE IF NOT EXISTS company (
+  id   BIGINT       NOT NULL,
+  name VARCHAR(128) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS company_user (
+  id         BIGINT  NOT NULL,
+  company_id BIGINT  NOT NULL REFERENCES company (id) ON DELETE CASCADE,
+  user_id    BIGINT  NOT NULL REFERENCES application_user (id) ON DELETE CASCADE,
+  admin      BOOLEAN NOT NULL,
+  PRIMARY KEY (id)
+);
+
 CREATE SEQUENCE IF NOT EXISTS customer_id_seq;
 CREATE TABLE IF NOT EXISTS customer (
   id         BIGINT       NOT NULL DEFAULT nextval('customer_id_seq'),
