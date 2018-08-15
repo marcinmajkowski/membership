@@ -12,7 +12,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS application_user_lower_email_unique_idx
 
 CREATE TABLE IF NOT EXISTS company (
   id   BIGINT       NOT NULL,
-  name VARCHAR(128) NOT NULL,
+  name VARCHAR(128) NOT NULL CHECK (length(name) > 0),
   PRIMARY KEY (id)
 );
 
